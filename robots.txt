@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mabdulrafay7zip.github.io/sitemap.xml
