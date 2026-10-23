@@ -682,6 +682,100 @@ if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     .orbit-text svg,.orbit-dash,.orbit-glow,.orbit-chip,.portrait-frame{animation:none !important}
     .orbit-chip{opacity:1 !important}
   }
+
+  /* ================= v2 — Aceternity / Skiper-style component layer ================= */
+  /* ---------- hero perspective grid floor ---------- */
+  .hero-floor{
+    position:absolute;left:-25%;bottom:-14%;width:150%;height:48%;z-index:0;pointer-events:none;
+    background-image:
+      linear-gradient(rgba(212,175,55,.16) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(212,175,55,.16) 1px,transparent 1px);
+    background-size:54px 54px;
+    transform:perspective(620px) rotateX(63deg) translateY(var(--fy,0px));
+    transform-origin:top center;
+    -webkit-mask-image:linear-gradient(to top,transparent 2%,#000 34%,#000 72%,transparent 98%);
+            mask-image:linear-gradient(to top,transparent 2%,#000 34%,#000 72%,transparent 98%);
+  }
+  /* ---------- meteors (gold shooting stars, hero only) ---------- */
+  .meteors{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;transform:translateY(var(--my2,0px))}
+  .meteor{
+    position:absolute;width:110px;height:2px;border-radius:2px;opacity:0;
+    background:linear-gradient(90deg,#f4e5b0,rgba(212,175,55,.55) 34%,transparent);
+    box-shadow:0 0 12px 1px rgba(233,207,122,.35);
+    transform:rotate(-36deg);
+    animation:meteor-fall var(--md,7s) linear infinite;animation-delay:var(--mdl,0s);
+  }
+  .meteor::before{content:"";position:absolute;left:-1px;top:50%;width:5px;height:5px;border-radius:50%;
+    background:#f7ecc8;transform:translate(-50%,-50%);box-shadow:0 0 10px 3px rgba(233,207,122,.55)}
+  @keyframes meteor-fall{
+    0%{transform:rotate(-36deg) translateX(0);opacity:0}
+    6%{opacity:1}
+    42%{opacity:1}
+    58%,100%{transform:rotate(-36deg) translateX(-52vw);opacity:0}
+  }
+  /* ---------- sparkles ---------- */
+  .sparkles{position:absolute;inset:0;z-index:1;pointer-events:none;transform:translateY(var(--sy,0px))}
+  .sparkle{position:absolute;left:var(--x);top:var(--y);width:var(--s,4px);height:var(--s,4px);border-radius:50%;
+    background:#f4e5b0;box-shadow:0 0 8px 2px rgba(233,207,122,.5);opacity:.25;
+    animation:sparkle-tw 3.6s ease-in-out infinite;animation-delay:var(--dl,0s)}
+  @keyframes sparkle-tw{0%,100%{opacity:.12;transform:scale(.65)}50%{opacity:.95;transform:scale(1.25)}}
+  /* ---------- card spotlight (mouse-tracking gold glow) ---------- */
+  .spot{position:relative}
+  .spot-fx{position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:3;opacity:0;transition:opacity .35s ease;
+    background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),rgba(212,175,55,.13),transparent 65%)}
+  .spot:hover .spot-fx{opacity:1}
+  /* ---------- project viz: tilt glare + gradient border ring ---------- */
+  .show{perspective:1100px}
+  .viz-fx{position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:2;opacity:0;transition:opacity .35s ease;
+    background:radial-gradient(380px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.15),transparent 62%)}
+  .show:hover .viz-fx{opacity:1}
+  .viz-fx::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;
+    background:linear-gradient(135deg,rgba(244,229,176,.95),rgba(212,175,55,.12) 42%,rgba(212,175,55,.7) 88%);
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
+            mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude}
+  /* ---------- infinite moving cards (skills marquee) ---------- */
+  .marquee{position:relative;overflow:hidden;padding:26px 0;border-top:1px solid var(--stroke-soft);border-bottom:1px solid var(--stroke-soft);
+    background:linear-gradient(180deg,rgba(212,175,55,.045),rgba(212,175,55,0) 130%);
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent)}
+  .marquee-track{display:flex;align-items:center;gap:0;width:max-content;animation:mq-scroll 36s linear infinite}
+  .marquee:hover .marquee-track{animation-play-state:paused}
+  @keyframes mq-scroll{to{transform:translateX(-50%)}}
+  .mq-item{font-family:var(--font-display);font-weight:600;font-size:19px;letter-spacing:.4px;color:var(--text-2);white-space:nowrap;padding:0 20px;transition:color .3s}
+  .mq-item:hover{color:var(--violet-bright)}
+  .mq-sep{color:var(--violet);font-size:13px;opacity:.85}
+  /* ---------- story tracing beam ---------- */
+  .story-body{position:relative;--pad:40px;--line:9px;padding-left:var(--pad)}
+  .beam{position:absolute;left:var(--line);top:8px;bottom:8px;width:2px;border-radius:2px;
+    background:rgba(212,175,55,.16);overflow:visible;pointer-events:none}
+  .beam-fill{position:absolute;left:0;top:0;width:100%;height:0%;border-radius:2px;
+    background:linear-gradient(180deg,var(--violet-bright),var(--violet));
+    box-shadow:0 0 12px rgba(212,175,55,.55)}
+  .beam-fill::after{content:"";position:absolute;left:50%;bottom:-4px;width:9px;height:9px;border-radius:50%;
+    transform:translateX(-50%);background:#f4e5b0;box-shadow:0 0 12px 3px rgba(233,207,122,.65)}
+  .story-body .chapter{position:relative}
+  .story-body .chapter::before{content:"";position:absolute;top:50%;width:11px;height:11px;border-radius:50%;
+    left:calc(var(--line) - var(--pad) - 4.5px);transform:translateY(-50%);
+    background:var(--bg);border:2px solid rgba(212,175,55,.55);transition:background .4s,box-shadow .4s,border-color .4s;z-index:1}
+  .story-body .chapter.lit::before{background:var(--violet);border-color:var(--violet-bright);box-shadow:0 0 10px 2px rgba(212,175,55,.5)}
+  @media (max-width:640px){ .story-body{--pad:28px;--line:6px} }
+  /* ---------- word reveal (text-generate) ---------- */
+  .wr-w{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.12em;margin-bottom:-.12em}
+  .wr-i{display:inline-block;transform:translateY(115%);transition:transform .7s cubic-bezier(.2,.65,.25,1);transition-delay:calc(var(--i)*55ms)}
+  .wr-in .wr-i{transform:none}
+  .tg-i{display:inline-block;opacity:0;filter:blur(6px);transform:translateY(7px);
+    transition:opacity .6s ease,filter .6s ease,transform .6s ease;transition-delay:calc(var(--i)*38ms)}
+  .tg-in .tg-i{opacity:1;filter:blur(0);transform:none}
+  /* ---------- wavy accent dividers ---------- */
+  .wave-div{height:56px;overflow:hidden;pointer-events:none;opacity:.55}
+  .wave-div svg{display:block;width:200%;height:100%;animation:wave-pan 16s ease-in-out infinite alternate}
+  @keyframes wave-pan{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  @media (max-width:640px){ .wave-div{height:38px} .mq-item{font-size:16px;padding:0 14px} }
+  @media (prefers-reduced-motion: reduce){
+    .meteor,.sparkle,.marquee-track,.wave-div svg{animation:none !important}
+    .marquee-track{flex-wrap:wrap;width:auto}
+    .wr-i,.tg-i{transform:none !important;opacity:1 !important;filter:none !important}
+    .beam-fill{height:100% !important}
+  }
 </style>
 </head>
 <body>
@@ -723,6 +817,28 @@ if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     <canvas id="particles" aria-hidden="true"></canvas>
     <div class="orb orb-a" aria-hidden="true"></div>
     <div class="orb orb-b" aria-hidden="true"></div>
+    <div class="hero-floor" aria-hidden="true"></div>
+    <div class="meteors" aria-hidden="true">
+      <span class="meteor" style="top:9%;left:88%;--md:6.5s;--mdl:1.2s"></span>
+      <span class="meteor" style="top:4%;left:64%;--md:8s;--mdl:4.4s"></span>
+      <span class="meteor" style="top:16%;left:96%;--md:7.2s;--mdl:7.6s"></span>
+      <span class="meteor" style="top:2%;left:38%;--md:9s;--mdl:10.8s"></span>
+      <span class="meteor" style="top:22%;left:74%;--md:7.8s;--mdl:13.5s"></span>
+    </div>
+    <div class="sparkles" aria-hidden="true">
+      <span class="sparkle" style="--x:12%;--y:22%;--s:4px;--dl:.2s"></span>
+      <span class="sparkle" style="--x:22%;--y:64%;--s:3px;--dl:1.4s"></span>
+      <span class="sparkle" style="--x:34%;--y:14%;--s:5px;--dl:2.1s"></span>
+      <span class="sparkle" style="--x:47%;--y:78%;--s:3px;--dl:.8s"></span>
+      <span class="sparkle" style="--x:58%;--y:10%;--s:4px;--dl:2.9s"></span>
+      <span class="sparkle" style="--x:66%;--y:52%;--s:3px;--dl:1.9s"></span>
+      <span class="sparkle" style="--x:76%;--y:26%;--s:5px;--dl:.5s"></span>
+      <span class="sparkle" style="--x:84%;--y:66%;--s:3px;--dl:2.4s"></span>
+      <span class="sparkle" style="--x:91%;--y:38%;--s:4px;--dl:1.1s"></span>
+      <span class="sparkle" style="--x:6%;--y:46%;--s:3px;--dl:3.2s"></span>
+      <span class="sparkle" style="--x:41%;--y:36%;--s:3px;--dl:1.7s"></span>
+      <span class="sparkle" style="--x:70%;--y:84%;--s:4px;--dl:3.6s"></span>
+    </div>
     <div class="wrap hero-inner">
       <div class="hero-grid">
         <div class="hero-copy">
@@ -788,7 +904,14 @@ if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     </div>
   </div>
 
-  <!-- ============ MY SHORT STORY ============ -->
+  
+  <!-- ============ SKILLS MARQUEE (v2) ============ -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track"><span class="mq-item">Python</span><span class="mq-sep">✦</span><span class="mq-item">Machine Learning</span><span class="mq-sep">✦</span><span class="mq-item">Deep Learning</span><span class="mq-sep">✦</span><span class="mq-item">scikit-learn</span><span class="mq-sep">✦</span><span class="mq-item">Pandas &amp; NumPy</span><span class="mq-sep">✦</span><span class="mq-item">NLP · TF-IDF</span><span class="mq-sep">✦</span><span class="mq-item">Random Forest</span><span class="mq-sep">✦</span><span class="mq-item">SVM</span><span class="mq-sep">✦</span><span class="mq-item">K-Means</span><span class="mq-sep">✦</span><span class="mq-item">Feature Engineering</span><span class="mq-sep">✦</span><span class="mq-item">Model Evaluation</span><span class="mq-sep">✦</span><span class="mq-item">Data Cleaning</span><span class="mq-sep">✦</span><span class="mq-item">Clustering</span><span class="mq-sep">✦</span><span class="mq-item">C++</span><span class="mq-sep">✦</span><span class="mq-item">Git &amp; GitHub</span><span class="mq-sep">✦</span><span class="mq-item">Jupyter</span><span class="mq-sep">✦</span><span class="mq-item">Python</span><span class="mq-sep">✦</span><span class="mq-item">Machine Learning</span><span class="mq-sep">✦</span><span class="mq-item">Deep Learning</span><span class="mq-sep">✦</span><span class="mq-item">scikit-learn</span><span class="mq-sep">✦</span><span class="mq-item">Pandas &amp; NumPy</span><span class="mq-sep">✦</span><span class="mq-item">NLP · TF-IDF</span><span class="mq-sep">✦</span><span class="mq-item">Random Forest</span><span class="mq-sep">✦</span><span class="mq-item">SVM</span><span class="mq-sep">✦</span><span class="mq-item">K-Means</span><span class="mq-sep">✦</span><span class="mq-item">Feature Engineering</span><span class="mq-sep">✦</span><span class="mq-item">Model Evaluation</span><span class="mq-sep">✦</span><span class="mq-item">Data Cleaning</span><span class="mq-sep">✦</span><span class="mq-item">Clustering</span><span class="mq-sep">✦</span><span class="mq-item">C++</span><span class="mq-sep">✦</span><span class="mq-item">Git &amp; GitHub</span><span class="mq-sep">✦</span><span class="mq-item">Jupyter</span><span class="mq-sep">✦</span></div>
+  </div>
+
+  <div class="wave-div" aria-hidden="true"><svg viewBox="0 0 2400 60" preserveAspectRatio="none" focusable="false"><defs><linearGradient id="wgrad-1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#d4af37" stop-opacity="0"/><stop offset=".25" stop-color="#d4af37" stop-opacity=".8"/><stop offset=".5" stop-color="#e9cf7a" stop-opacity=".9"/><stop offset=".75" stop-color="#d4af37" stop-opacity=".8"/><stop offset="1" stop-color="#d4af37" stop-opacity="0"/></linearGradient></defs><path d="M0,30 C200,6 400,54 600,30 C800,6 1000,54 1200,30 C1400,6 1600,54 1800,30 C2000,6 2200,54 2400,30" fill="none" stroke="url(#wgrad-1)" stroke-width="1.6"/></svg></div>
+<!-- ============ MY SHORT STORY ============ -->
   <section id="story">
     <div class="wrap">
       <div class="sec-head reveal">
@@ -797,6 +920,7 @@ if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       </div>
       <div class="story-grid">
         <div class="story-body reveal reveal-left">
+          <div class="beam" aria-hidden="true"><span class="beam-fill"></span></div>
           <p class="story-lead">Every developer has an origin story. Mine starts with a falling block, a blank screen — and the question <em>"what if the machine could learn?"</em></p>
 
           <span class="chapter">Chapter 01 — The First Build</span>
@@ -1010,7 +1134,9 @@ if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     </div>
   </section>
 
-  <!-- ============ CRAFT / SKILLS ============ -->
+  
+  <div class="wave-div" aria-hidden="true"><svg viewBox="0 0 2400 60" preserveAspectRatio="none" focusable="false"><defs><linearGradient id="wgrad-2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#d4af37" stop-opacity="0"/><stop offset=".25" stop-color="#d4af37" stop-opacity=".8"/><stop offset=".5" stop-color="#e9cf7a" stop-opacity=".9"/><stop offset=".75" stop-color="#d4af37" stop-opacity=".8"/><stop offset="1" stop-color="#d4af37" stop-opacity="0"/></linearGradient></defs><path d="M0,30 C200,6 400,54 600,30 C800,6 1000,54 1200,30 C1400,6 1600,54 1800,30 C2000,6 2200,54 2400,30" fill="none" stroke="url(#wgrad-2)" stroke-width="1.6"/></svg></div>
+<!-- ============ CRAFT / SKILLS ============ -->
   <section id="craft" style="padding-top:30px">
     <div class="wrap">
       <div class="sec-head reveal">
@@ -1048,7 +1174,9 @@ if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     </div>
   </section>
 
-  <!-- ============ CONTACT ============ -->
+  
+  <div class="wave-div" aria-hidden="true"><svg viewBox="0 0 2400 60" preserveAspectRatio="none" focusable="false"><defs><linearGradient id="wgrad-3" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#d4af37" stop-opacity="0"/><stop offset=".25" stop-color="#d4af37" stop-opacity=".8"/><stop offset=".5" stop-color="#e9cf7a" stop-opacity=".9"/><stop offset=".75" stop-color="#d4af37" stop-opacity=".8"/><stop offset="1" stop-color="#d4af37" stop-opacity="0"/></linearGradient></defs><path d="M0,30 C200,6 400,54 600,30 C800,6 1000,54 1200,30 C1400,6 1600,54 1800,30 C2000,6 2200,54 2400,30" fill="none" stroke="url(#wgrad-3)" stroke-width="1.6"/></svg></div>
+<!-- ============ CONTACT ============ -->
   <section id="contact" style="padding-top:20px">
     <div class="wrap">
       <div class="contact-card reveal reveal-zoom">
@@ -1384,6 +1512,120 @@ if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     counters.forEach(finishCounter);
     fillBars();
   }, 2500);
+})();
+</script>
+
+<script>
+/* ================= v2 component layer ================= */
+(function(){
+  "use strict";
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var finePointer = window.matchMedia("(pointer: fine)").matches;
+
+  /* ---------- word reveal: section headings (rise) + hero subtitle (text-generate) ---------- */
+  function wrapWords(el, cls, skip){
+    var i = 0;
+    (function walk(node){
+      Array.prototype.slice.call(node.childNodes).forEach(function(n){
+        if (n.nodeType === 3){
+          var frag = document.createDocumentFragment();
+          n.textContent.split(/(\s+)/).forEach(function(part){
+            if (!part) return;
+            if (/^\s+$/.test(part)){ frag.appendChild(document.createTextNode(" ")); return; }
+            var outer = document.createElement("span");
+            if (cls === "wr"){ outer.className = "wr-w"; }
+            var inner = document.createElement("span");
+            inner.className = cls === "wr" ? "wr-i" : "tg-i";
+            inner.style.setProperty("--i", i++);
+            inner.textContent = part;
+            outer.appendChild(inner); frag.appendChild(outer);
+          });
+          node.replaceChild(frag, n);
+        } else if (n.nodeType === 1 && n.tagName !== "BR" && !(skip && skip(n))){
+          walk(n);
+        }
+      });
+    })(el);
+  }
+  var heads = document.querySelectorAll(".sec-head h2");
+  heads.forEach(function(h){ wrapWords(h, "wr", null); });
+  var heroIntro = document.querySelector(".hero-intro");
+  if (heroIntro){ wrapWords(heroIntro, "tg", function(n){ return n.id === "typed" || n.closest && n.closest("#typed"); }); }
+
+  var revealIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if (en.isIntersecting){
+        en.target.classList.add(en.target.classList.contains("hero-intro") ? "tg-in" : "wr-in");
+        revealIO.unobserve(en.target);
+      }
+    });
+  }, {threshold:.35});
+  heads.forEach(function(h){ revealIO.observe(h); });
+  if (heroIntro){ revealIO.observe(heroIntro); }
+
+  /* ---------- spotlight cards ---------- */
+  if (finePointer && !reduced){
+    document.querySelectorAll(".skill, .facts, .contact-card, .stat, .craft-note, .xp-body").forEach(function(card){
+      card.classList.add("spot");
+      var fx = document.createElement("span"); fx.className = "spot-fx"; fx.setAttribute("aria-hidden","true");
+      card.appendChild(fx);
+      card.addEventListener("mousemove", function(e){
+        var r = card.getBoundingClientRect();
+        card.style.setProperty("--mx", ((e.clientX - r.left) / r.width * 100).toFixed(1) + "%");
+        card.style.setProperty("--my", ((e.clientY - r.top) / r.height * 100).toFixed(1) + "%");
+      }, {passive:true});
+    });
+    /* ---------- project viz: glare + tilt ---------- */
+    document.querySelectorAll(".show-viz").forEach(function(viz){
+      var fx = document.createElement("span"); fx.className = "viz-fx"; fx.setAttribute("aria-hidden","true");
+      viz.appendChild(fx);
+      viz.addEventListener("mousemove", function(e){
+        var r = viz.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width - .5;
+        var py = (e.clientY - r.top) / r.height - .5;
+        viz.style.transform = "translateY(-6px) rotateX(" + (-py * 5).toFixed(2) + "deg) rotateY(" + (px * 6).toFixed(2) + "deg)";
+      }, {passive:true});
+      viz.addEventListener("mouseleave", function(){ viz.style.transform = ""; });
+    });
+  }
+
+  /* ---------- story tracing beam + hero parallax (scroll, rAF-throttled) ---------- */
+  var beamFill = document.querySelector(".beam-fill");
+  var storySec = document.getElementById("story");
+  var chapters = document.querySelectorAll(".story-body .chapter");
+  var floor = document.querySelector(".hero-floor");
+  var meteors = document.querySelector(".meteors");
+  var sparkles = document.querySelector(".sparkles");
+  var ticking = false;
+  function onScroll(){
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(function(){
+      ticking = false;
+      var vh = window.innerHeight;
+      if (beamFill && storySec){
+        var r = storySec.getBoundingClientRect();
+        var p = Math.max(0, Math.min(1, (vh * .68 - r.top) / r.height));
+        beamFill.style.height = (p * 100).toFixed(1) + "%";
+        chapters.forEach(function(ch){
+          var cr = ch.getBoundingClientRect();
+          ch.classList.toggle("lit", cr.top < vh * .68);
+        });
+      }
+      var y = window.scrollY || 0;
+      if (y < vh * 1.2){
+        if (floor) floor.style.setProperty("--fy", (y * .14).toFixed(1) + "px");
+        if (meteors) meteors.style.setProperty("--my2", (y * .06).toFixed(1) + "px");
+        if (sparkles) sparkles.style.setProperty("--sy", (y * .1).toFixed(1) + "px");
+      }
+    });
+  }
+  if (!reduced){
+    window.addEventListener("scroll", onScroll, {passive:true});
+    onScroll();
+  } else if (beamFill){
+    beamFill.style.height = "100%";
+    chapters.forEach(function(ch){ ch.classList.add("lit"); });
+  }
 })();
 </script>
 </body>
