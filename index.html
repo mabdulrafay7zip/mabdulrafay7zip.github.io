@@ -8,15 +8,30 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>try{if(localStorage.getItem('rafay-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}</script>
 <style>
 :root{
   --ink:#23231f; --ink2:#1b1b18; --cream:#f7f2e7; --paper:#fffdf6;
   --muted:rgba(247,242,231,.62); --muted-d:rgba(35,35,31,.62);
   --line:rgba(247,242,231,.16); --line-d:rgba(35,35,31,.16);
-  --gold:#c9a227; --lime:#d7ff3e;
+  --gold:#c9a227; --lime:#d7ff3e; --lime-ink:#5c7a00;
   --blue:#4a7fbf; --charcoal:#2e2e2a; --mint:#a7c6a0; --terra:#c96f4a;
+  --navbg:rgba(27,27,24,.92);
   --ease:cubic-bezier(.16,1,.3,1);
 }
+/* Light theme (hanging toggle in the hero switches to this) */
+html[data-theme="light"]{
+  --ink:#f3efe4; --ink2:#e8e1cf; --cream:#23231f; --paper:#fffdf6;
+  --muted:rgba(35,35,31,.62);
+  --line:rgba(35,35,31,.16);
+  --navbg:rgba(243,239,228,.92);
+}
+html[data-theme="light"] .brand em,html[data-theme="light"] .clock-pill b,html[data-theme="light"] .door .open-hint{color:var(--lime-ink)}
+html[data-theme="light"] .contact h2 .soft{color:#5c7a4e}
+html[data-theme="light"] .pill.outline{border-color:rgba(35,35,31,.5)}
+html[data-theme="light"] .deck-nav button{border-color:rgba(35,35,31,.4)}
+html[data-theme="light"] .pcard{box-shadow:0 26px 50px rgba(35,35,31,.18)}
+html.theming *,html.theming *::before,html.theming *::after{transition:background-color .55s var(--ease),color .55s var(--ease),border-color .55s var(--ease) !important}
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{background:var(--ink);color:var(--cream);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
@@ -36,21 +51,30 @@ h1,h2,h3,.disp{font-family:'Archivo',sans-serif}
 .rv.in{opacity:1;transform:none}
 
 /* ---------- top nav ---------- */
-.topnav{position:sticky;top:0;z-index:90;background:rgba(27,27,24,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-.topnav-in{max-width:1220px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:26px;min-height:60px}
-.brand{font:800 14px 'Archivo';letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+.topnav{position:sticky;top:0;z-index:90;background:var(--navbg);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.topnav-in{max-width:1220px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:18px;min-height:60px}
+.brand{font:800 13px 'Archivo';letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
 .brand em{font-style:normal;color:var(--lime)}
 .navlinks{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;flex:1;padding:6px 0}
 .navlinks::-webkit-scrollbar{display:none}
-.navlinks a,.navlinks button{white-space:nowrap;background:none;border:0;cursor:pointer;font:600 12.5px 'Inter';letter-spacing:.04em;color:var(--muted);padding:8px 12px;border-radius:99px;transition:color .25s,background .25s}
+.navlinks a,.navlinks button{white-space:nowrap;background:none;border:0;cursor:pointer;font:600 12px 'Inter';letter-spacing:.04em;color:var(--muted);padding:8px 10px;border-radius:99px;transition:color .25s,background .25s}
 .navlinks a:hover,.navlinks button:hover{color:var(--cream)}
 .navlinks a.active,.navlinks button.active{color:var(--cream);font-weight:700;box-shadow:inset 0 -2px 0 var(--lime)}
-.clock-pill{flex:none;font:600 11.5px 'Inter';letter-spacing:.04em;border:1px solid var(--line);border-radius:99px;padding:8px 14px;white-space:nowrap;background:var(--ink2)}
+.clock-pill{flex:none;font:600 11.5px 'Inter';letter-spacing:.04em;border:1px solid var(--line);border-radius:99px;padding:8px 12px;white-space:nowrap;background:var(--ink2)}
+@media(max-width:1280px){.clock-pill .cdate{display:none}}
 .clock-pill b{color:var(--lime);font-weight:700}
 .clock-pill .live-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--lime);margin-right:7px;vertical-align:1px}
 
 /* ---------- hero ---------- */
-.hero{padding:64px 0 0;overflow:hidden}
+.hero{padding:64px 0 0;overflow:hidden;position:relative}
+/* hanging theme toggle (pull-cord with gold dot, top-right of the hero) */
+.theme-hang{position:absolute;top:0;right:44px;z-index:5;background:none;border:0;cursor:pointer;padding:0;transform-origin:top center;line-height:0}
+.theme-hang svg{display:block;overflow:visible}
+.theme-hang.pulled{animation:hangSwing .6s var(--ease)}
+@keyframes hangSwing{0%{transform:rotate(0)}25%{transform:rotate(7deg)}55%{transform:rotate(-5deg)}80%{transform:rotate(2deg)}100%{transform:rotate(0)}}
+.theme-hang .hang-label{position:absolute;top:52px;right:26px;white-space:nowrap;background:#23231f;color:#f7f2e7;font:700 11px 'Inter';letter-spacing:.08em;padding:7px 12px;border-radius:99px;opacity:0;transform:translateX(6px);transition:opacity .25s,transform .25s;pointer-events:none;box-shadow:0 8px 20px rgba(0,0,0,.3)}
+.theme-hang:hover .hang-label,.theme-hang:focus-visible .hang-label{opacity:1;transform:none}
+@media(max-width:520px){.theme-hang{right:14px;transform:scale(.85);transform-origin:top right}}
 .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:end}
 .hero-eyebrow{font:600 12px 'Inter';letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
 .hero-eyebrow .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--lime);margin-right:10px;vertical-align:1px}
@@ -58,7 +82,7 @@ h1,h2,h3,.disp{font-family:'Archivo',sans-serif}
 .hero h1 .iam{display:block;font-size:.62em;font-weight:800;color:var(--muted);letter-spacing:0;margin-top:10px}
 /* flip pad */
 .flippad{margin-top:18px;perspective:900px;width:min(460px,100%)}
-.flippad-inner{position:relative;background:var(--cream);color:var(--ink);border-radius:14px;padding:30px 28px 26px 28px;box-shadow:0 22px 40px rgba(0,0,0,.4);transform:rotate(2deg);transform-style:preserve-3d;transition:transform .32s var(--ease);cursor:pointer;border:0;width:100%;text-align:left;display:block}
+.flippad-inner{position:relative;background:#f7f2e7;color:#23231f;border-radius:14px;padding:30px 28px 26px 28px;box-shadow:0 22px 40px rgba(0,0,0,.4);transform:rotate(2deg);transform-style:preserve-3d;transition:transform .32s var(--ease);cursor:pointer;border:0;width:100%;text-align:left;display:block}
 .flippad-inner.flip{transform:rotate(2deg) rotateX(88deg)}
 .flippad-inner:hover{transform:rotate(2deg) translateY(-3px)}
 .flippad-inner.flip:hover{transform:rotate(2deg) rotateX(88deg)}
@@ -70,15 +94,15 @@ h1,h2,h3,.disp{font-family:'Archivo',sans-serif}
 .hero-btns{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px}
 .pill{display:inline-flex;align-items:center;gap:12px;border-radius:99px;padding:14px 26px;font:700 13.5px 'Inter';letter-spacing:.02em;cursor:pointer;border:2px solid transparent;transition:transform .2s,background .25s,color .25s}
 .pill:hover{transform:translateY(-2px)}
-.pill.light{background:var(--cream);color:var(--ink)}
+.pill.light{background:#fffdf6;color:#23231f}
 .pill.light:hover{background:var(--lime)}
-.pill.light .arr{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--cream);font-size:14px}
+.pill.light .arr{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:#23231f;color:#f7f2e7;font-size:14px}
 .pill.outline{border-color:rgba(247,242,231,.55);color:var(--cream);background:transparent}
 .pill.outline:hover{border-color:var(--lime);color:var(--lime)}
 /* portrait */
 .portrait{position:relative}
-.portrait img{width:100%;height:min(540px,62vw);object-fit:cover;object-position:top center;border-radius:18px 18px 0 0;display:block;background:#3a3a34}
-.portrait .avail{position:absolute;left:16px;bottom:16px;display:inline-flex;align-items:center;gap:8px;background:var(--cream);color:var(--ink);border-radius:99px;padding:9px 16px;font:700 12px 'Inter';letter-spacing:.04em;box-shadow:0 8px 20px rgba(0,0,0,.35)}
+.portrait img{width:100%;height:min(540px,62vw);object-fit:cover;object-position:top center;display:block;background:transparent;filter:drop-shadow(0 20px 28px rgba(0,0,0,.4))}
+.portrait .avail{position:absolute;left:16px;bottom:16px;display:inline-flex;align-items:center;gap:8px;background:#f7f2e7;color:#23231f;border-radius:99px;padding:9px 16px;font:700 12px 'Inter';letter-spacing:.04em;box-shadow:0 8px 20px rgba(0,0,0,.35)}
 .portrait .avail i{width:8px;height:8px;border-radius:50%;background:#2e9e4f;display:block}
 /* marquee */
 .marquee{margin-top:56px;transform:rotate(-1.4deg) scale(1.02);background:var(--ink2);border-top:1px solid var(--gold);border-bottom:1px solid var(--gold);overflow:hidden;padding:13px 0}
@@ -146,7 +170,7 @@ h1,h2,h3,.disp{font-family:'Archivo',sans-serif}
 .deck-nav button{width:46px;height:46px;border-radius:50%;border:1px solid rgba(247,242,231,.4);background:transparent;cursor:pointer;font-size:18px;color:var(--cream);transition:background .25s,color .25s,transform .2s}
 .deck-nav button:hover{background:var(--lime);color:var(--ink);transform:translateY(-2px)}
 .deck{position:relative;height:380px;margin-top:22px;perspective:1400px;outline-offset:6px}
-.pcard{position:absolute;top:0;left:50%;width:min(560px,92%);margin-left:calc(min(560px,92%)/-2);height:360px;background:var(--paper);color:var(--ink);border-radius:20px;box-shadow:0 26px 50px rgba(0,0,0,.45);padding:30px 30px 24px;display:flex;flex-direction:column;transition:transform .55s var(--ease),opacity .55s var(--ease);overflow:hidden}
+.pcard{position:absolute;top:0;left:50%;width:min(560px,92%);margin-left:calc(min(560px,92%)/-2);height:360px;background:var(--paper);color:#23231f;border-radius:20px;box-shadow:0 26px 50px rgba(0,0,0,.45);padding:30px 30px 24px;display:flex;flex-direction:column;transition:transform .55s var(--ease),opacity .55s var(--ease);overflow:hidden}
 .pcard .tag{font:700 10.5px 'Inter';letter-spacing:.22em;text-transform:uppercase;color:var(--muted-d)}
 .pcard h5{font:800 clamp(24px,3.4vw,32px)/1.12 'Archivo';letter-spacing:-.01em;margin:12px 0 10px}
 .pcard .desc{font-size:14.5px;line-height:1.7;color:var(--muted-d)}
@@ -154,10 +178,10 @@ h1,h2,h3,.disp{font-family:'Archivo',sans-serif}
 .pcard .metric small{display:block;font:600 10px 'Inter';letter-spacing:.2em;text-transform:uppercase;color:var(--muted-d);margin-top:4px}
 .pcard .visual{margin-top:auto;padding-top:16px}
 .pcard .links{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
-.pcard .links a{font:700 12px 'Inter';letter-spacing:.06em;border:2px solid var(--ink);border-radius:99px;padding:10px 18px;transition:background .25s,color .25s}
-.pcard .links a:hover{background:var(--ink);color:var(--cream)}
-.pcard .links a.live{background:var(--ink);color:var(--cream)}
-.pcard .links a.live:hover{background:var(--lime);color:var(--ink);border-color:var(--lime)}
+.pcard .links a{font:700 12px 'Inter';letter-spacing:.06em;border:2px solid #23231f;border-radius:99px;padding:10px 18px;transition:background .25s,color .25s}
+.pcard .links a:hover{background:#23231f;color:#f7f2e7}
+.pcard .links a.live{background:#23231f;color:#f7f2e7}
+.pcard .links a.live:hover{background:var(--lime);color:#23231f;border-color:var(--lime)}
 .deck-foot{margin-top:18px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
 .deck-count{font:600 12px 'Inter';letter-spacing:.2em;color:var(--muted)}
 
@@ -174,8 +198,12 @@ h1,h2,h3,.disp{font-family:'Archivo',sans-serif}
 .story-entry p b{color:var(--cream)}
 .timeline{position:relative;margin-top:34px;padding-left:26px;border-left:2px solid var(--line)}
 .tl-item{padding:0 0 26px;position:relative}
-.tl-item::before{content:"";position:absolute;left:-33px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--ink);border:2px solid var(--lime)}
-.tl-item.now::before{background:var(--lime)}
+.tl-item::before{content:"";position:absolute;left:-33px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--paper);border:2px solid var(--lime)}
+.tl-item.now::before{background:var(--lime);animation:dotPop .45s var(--ease)}
+@keyframes dotPop{from{transform:scale(.3)}to{transform:scale(1)}}
+/* story entry change animation (year + heading + text slide in, like the reel) */
+.swap-in{animation:storyIn .5s var(--ease)}
+@keyframes storyIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 .tl-item button{background:none;border:0;cursor:pointer;text-align:left;padding:0;font:700 14px 'Inter';color:var(--muted);letter-spacing:.02em}
 .tl-item.now button{color:var(--cream)}
 .tl-item span{display:block;font:500 12px 'Inter';color:var(--muted);margin-top:3px}
@@ -222,7 +250,7 @@ h1,h2,h3,.disp{font-family:'Archivo',sans-serif}
   .clock-pill .cdate{display:none}
   .topnav-in{gap:14px}
   .topnav-in{flex-wrap:wrap;gap:8px 14px;padding:10px 16px}
-  .navlinks{order:3;flex:1 1 100%}
+  .navlinks{order:3;flex:1 1 100%;flex-wrap:wrap;overflow-x:visible}
   .clock-pill{margin-left:auto}
   .pcard{padding:24px 22px 20px;height:430px}
   .deck{height:450px}
@@ -237,6 +265,8 @@ h1,h2,h3,.disp{font-family:'Archivo',sans-serif}
   .door{transition:none}
   .door-row{transition:none}
   .detail.show .detail-top,.detail.show .big-door .leaf,.door-row.row-in{animation:none}
+  .swap-in,.tl-item.now::before,.theme-hang.pulled{animation:none}
+  html.theming *,html.theming *::before,html.theming *::after{transition:none !important}
   .pcard{transition:none}
   .deck-nav button,.pill,.next-btn{transition:none}
 }
@@ -254,8 +284,8 @@ h1,h2,h3,.disp{font-family:'Archivo',sans-serif}
       <button type="button" data-door-link="ai" data-nav="doors">AI Applications</button>
       <button type="button" data-door-link="ds" data-nav="doors">Data Science</button>
       <button type="button" data-door-link="web" data-nav="doors">Web &amp; Games</button>
-      <a href="#story" data-nav="story">My Story</a>
       <a href="#contact" data-nav="contact">Contact</a>
+      <a href="#story" data-nav="story">My Story</a>
     </nav>
     <span class="clock-pill" id="clockPill" aria-label="Local time in Pakistan"><span class="live-dot" aria-hidden="true"></span><b>Local time:</b> <span id="clockTime">--:--</span><span class="cdate"> &bull; <span id="clockDate">--</span></span></span>
   </div>
@@ -264,6 +294,14 @@ h1,h2,h3,.disp{font-family:'Archivo',sans-serif}
 <main>
 <!-- ======= HERO ======= -->
 <section class="hero" id="home">
+  <button type="button" class="theme-hang" id="themeHang" aria-label="Switch to light theme" aria-pressed="false" title="Theme">
+    <svg width="26" height="68" viewBox="0 0 26 68" aria-hidden="true">
+      <defs><linearGradient id="hangGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe98a"/><stop offset="1" stop-color="#a8861d"/></linearGradient></defs>
+      <path d="M13 0 C 17 20, 9 34, 13 50" fill="none" stroke="#9a8f6d" stroke-width="2"/>
+      <circle cx="13" cy="58" r="7.5" fill="url(#hangGold)" stroke="#8a6d1c" stroke-width="1"/>
+    </svg>
+    <span class="hang-label" id="hangLabel">Light</span>
+  </button>
   <div class="wrap">
     <div class="hero-grid">
       <div>
@@ -283,7 +321,7 @@ h1,h2,h3,.disp{font-family:'Archivo',sans-serif}
         </div>
       </div>
       <div class="portrait rv" style="--d:.2s">
-        <img src="https://mabdulrafay7zip.github.io/avatar.jpg" alt="Portrait of Muhammad Abdul Rafay" fetchpriority="high">
+        <img src="avatar-cutout.png" alt="Portrait of Muhammad Abdul Rafay" fetchpriority="high">
         <span class="avail"><i aria-hidden="true"></i>Open to internships</span>
       </div>
     </div>
@@ -373,8 +411,8 @@ h1,h2,h3,.disp{font-family:'Archivo',sans-serif}
     </div>
     <div class="rv" style="--d:.1s">
       <div class="story-entry">
-        <h3 id="storyHeading">Let&rsquo;s go back in time.</h3>
-        <p id="storyPara">Three years, one direction: from a first-year student curious about AI to someone shipping measured machine learning work in public.</p>
+        <h3 id="storyHeading">Shipping in public.</h3>
+        <p id="storyPara">Now in my <b>second year</b>: <b>seven ML projects live</b> on GitHub, a daily contribution streak kept alive, and this portfolio rebuilt to show the work as it deserves to be shown.</p>
       </div>
       <div class="timeline" id="timeline" role="list"></div>
       <button type="button" class="next-btn" id="storyNext" aria-label="Next story entry">&rarr;</button>
@@ -408,8 +446,8 @@ h1,h2,h3,.disp{font-family:'Archivo',sans-serif}
       <div>
         <h4>Navigate</h4>
         <a href="#home">Home</a>
-        <a href="#story">My Story</a>
         <a href="#contact">Contact</a>
+        <a href="#story">My Story</a>
         <a href="https://github.com/mabdulrafay7zip" target="_blank" rel="noopener">GitHub</a>
         <a href="https://www.linkedin.com/in/mabdulrafay7" target="_blank" rel="noopener">LinkedIn</a>
       </div>
@@ -711,6 +749,11 @@ h1,h2,h3,.disp{font-family:'Archivo',sans-serif}
     headEl.textContent = STORY[si].title + ".";
     paraEl.innerHTML = STORY[si].para;
     renderTimeline();
+    if (!RM) {
+      [yearEl, headEl, paraEl].forEach(function(el){
+        el.classList.remove("swap-in"); void el.offsetWidth; el.classList.add("swap-in");
+      });
+    }
   }
   document.getElementById("storyNext").addEventListener("click", function(){ showStory(si + 1); });
   renderTimeline();
@@ -738,6 +781,32 @@ h1,h2,h3,.disp{font-family:'Archivo',sans-serif}
   ["home","doors","story","contact"].forEach(function(id){
     var s = document.getElementById(id);
     if (s) secIO.observe(s);
+  });
+
+  /* ---------- hanging theme toggle (light / dark, like the reel) ---------- */
+  var hangBtn = document.getElementById("themeHang"),
+      hangLabel = document.getElementById("hangLabel");
+  function applyTheme(t, animate){
+    if (animate && !RM) {
+      document.documentElement.classList.add("theming");
+      setTimeout(function(){ document.documentElement.classList.remove("theming"); }, 650);
+    }
+    if (t === "light") { document.documentElement.setAttribute("data-theme", "light"); }
+    else { document.documentElement.removeAttribute("data-theme"); }
+    hangBtn.setAttribute("aria-pressed", t === "light" ? "true" : "false");
+    var lbl = t === "light" ? "Switch to dark theme" : "Switch to light theme";
+    hangBtn.setAttribute("aria-label", lbl);
+    hangBtn.setAttribute("title", lbl);
+    hangLabel.textContent = t === "light" ? "Dark" : "Light";
+    try { localStorage.setItem("rafay-theme", t); } catch (e) {}
+  }
+  var savedTheme = "dark";
+  try { savedTheme = localStorage.getItem("rafay-theme") || "dark"; } catch (e) {}
+  applyTheme(savedTheme === "light" ? "light" : "dark", false);
+  hangBtn.addEventListener("click", function(){
+    var next = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+    hangBtn.classList.remove("pulled"); void hangBtn.offsetWidth; hangBtn.classList.add("pulled");
+    applyTheme(next, true);
   });
 
   /* ---------- back to top ---------- */
