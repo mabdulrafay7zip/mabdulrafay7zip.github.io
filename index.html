@@ -92,8 +92,14 @@ h1,h2,h3,.disp{font-family:'Archivo',sans-serif}
 .doors-head{text-align:center;max-width:720px;margin:0 auto}
 .doors-head h2{font-size:clamp(38px,5.6vw,62px);font-weight:900;line-height:1.05;letter-spacing:-.01em;margin:16px 0 14px}
 .doors-head p{color:var(--muted);font-size:15.5px;line-height:1.7}
-.door-row{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:52px;perspective:1200px}
-.door{background:none;border:0;cursor:pointer;padding:0;text-align:center}
+.door-row{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:52px;perspective:1200px;transition:transform .64s var(--ease),opacity .64s var(--ease)}
+.door-row.zooming{transform:scale(1.55);opacity:.2}
+.door-row.row-in{animation:rowIn .5s var(--ease)}
+@keyframes rowIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+#doors.zooming .doors-head{opacity:0;transform:translateY(-10px)}
+.doors-head{transition:opacity .45s var(--ease),transform .45s var(--ease)}
+.door{background:none;border:0;cursor:pointer;padding:0;text-align:center;transition:transform .45s var(--ease)}
+.door:hover,.door:focus-visible{transform:scale(1.03);z-index:3}
 .door .frame{display:block;position:relative;height:380px;border-radius:190px 190px 14px 14px;overflow:hidden;box-shadow:0 24px 44px rgba(0,0,0,.45);border:1px solid rgba(0,0,0,.35)}
 .door .leaf{position:absolute;inset:0;border-radius:inherit;transform-origin:left center;transition:transform .6s var(--ease);background-image:repeating-linear-gradient(90deg,rgba(0,0,0,.14) 0 3px,transparent 3px 26px);box-shadow:inset 0 0 0 10px rgba(0,0,0,.18),inset 0 -30px 40px rgba(0,0,0,.25)}
 .door:hover .leaf,.door:focus-visible .leaf{transform:perspective(1000px) rotateY(-18deg)}
@@ -115,6 +121,10 @@ h1,h2,h3,.disp{font-family:'Archivo',sans-serif}
 /* door detail */
 .detail{display:none;margin-top:8px}
 .detail.show{display:block}
+.detail.show .detail-top{animation:enterRoom .6s var(--ease)}
+@keyframes enterRoom{from{opacity:0;transform:scale(1.12) translateY(16px)}to{opacity:1;transform:none}}
+.detail.show .big-door .leaf{animation:leafOpen .85s var(--ease) .08s both}
+@keyframes leafOpen{from{transform:perspective(1000px) rotateY(0deg)}to{transform:perspective(1000px) rotateY(-62deg)}}
 .detail-top{display:grid;grid-template-columns:300px 1fr;gap:44px;align-items:start}
 .big-door{position:relative;height:400px;border-radius:200px 200px 14px 14px;overflow:hidden;background:#101010;box-shadow:inset 0 0 0 10px rgba(0,0,0,.35),0 24px 44px rgba(0,0,0,.45);border:1px solid rgba(0,0,0,.4)}
 .big-door .inner{position:absolute;inset:26px 26px 26px 64px;border-radius:150px 150px 10px 10px;background:linear-gradient(160deg,#3d3a30,#24221c);display:flex;align-items:center;justify-content:center;text-align:center;padding:20px}
@@ -224,6 +234,9 @@ h1,h2,h3,.disp{font-family:'Archivo',sans-serif}
   .mq-track{animation:none}
   .flippad-inner,.flippad-inner.flip{transition:none}
   .door .leaf{transition:none}
+  .door{transition:none}
+  .door-row{transition:none}
+  .detail.show .detail-top,.detail.show .big-door .leaf,.door-row.row-in{animation:none}
   .pcard{transition:none}
   .deck-nav button,.pill,.next-btn{transition:none}
 }
@@ -615,13 +628,27 @@ h1,h2,h3,.disp{font-family:'Archivo',sans-serif}
       document.getElementById("doors").scrollIntoView({ behavior: RM ? "auto" : "smooth", block: "start" });
     }
     if (btn && !RM) {
+      // Video-like entry: the door swings wide while the whole row zooms
+      // toward it, as if the camera pushes through the doorway.
       btn.classList.add("swinging");
-      setTimeout(function(){ btn.classList.remove("swinging"); show(); }, 580);
+      var rect = btn.getBoundingClientRect(), rowRect = doorRow.getBoundingClientRect();
+      doorRow.style.transformOrigin = ((rect.left + rect.width / 2 - rowRect.left) / rowRect.width * 100).toFixed(1) + "% " + ((rect.top + rect.height / 2 - rowRect.top) / rowRect.height * 100).toFixed(1) + "%";
+      doorRow.classList.add("zooming");
+      document.getElementById("doors").classList.add("zooming");
+      setTimeout(function(){
+        btn.classList.remove("swinging");
+        doorRow.classList.remove("zooming");
+        document.getElementById("doors").classList.remove("zooming");
+        doorRow.style.transformOrigin = "";
+        show();
+      }, 640);
     } else { show(); }
   }
   function closeDoors(){
     detail.classList.remove("show");
     doorRow.style.display = "";
+    doorRow.classList.add("row-in");
+    setTimeout(function(){ doorRow.classList.remove("row-in"); }, 520);
     currentDoor = null;
     document.getElementById("doors").scrollIntoView({ behavior: RM ? "auto" : "smooth", block: "start" });
   }
@@ -646,12 +673,12 @@ h1,h2,h3,.disp{font-family:'Archivo',sans-serif}
 
   /* ---------- story timeline ---------- */
   var STORY = [
-    { year: "2024", title: "Starting out", label: "Started university",
-      para: "Started the BS Artificial Intelligence degree at <b>Air University, Islamabad</b> — and began learning Python properly, from the ground up." },
-    { year: "2025", title: "First real ML work", label: "Internships and first projects",
+    { year: "2025", title: "Starting out", label: "Started university — September 2025",
+      para: "Started the BS Artificial Intelligence degree at <b>Air University, Islamabad</b> in <b>September 2025</b> — and began learning Python properly, from the ground up." },
+    { year: "2026", title: "First real ML work", label: "Internships and first projects",
       para: "Completed <b>machine learning internships</b> and published my first ML projects on GitHub — models with real datasets and honest, measured results." },
-    { year: "2026", title: "Shipping in public", label: "Seven projects, daily streak",
-      para: "<b>Seven ML projects live</b> on GitHub, a daily contribution streak kept alive, and this portfolio rebuilt to show the work as it deserves to be shown." }
+    { year: "2026", title: "Shipping in public", label: "Seven projects, daily streak — second year",
+      para: "Now in my <b>second year</b>: <b>seven ML projects live</b> on GitHub, a daily contribution streak kept alive, and this portfolio rebuilt to show the work as it deserves to be shown." }
   ];
   var si = 2,
       yearEl = document.getElementById("bigYear"),
